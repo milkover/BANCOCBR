@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Banco de Questões CBR — Radiologia</title>
+    <style>
+      :root {
+        --bg: #0b1220;
+        --bg-elev: #111b2a;
+        --panel: #162437;
+        --panel-alt: #1b2d45;
+        --text: #edf3ff;
+        --muted: #a9b8cf;
+        --accent: #5aa9ff;
+        --accent-strong: #2b7de9;
+        --accent-soft: rgba(90, 169, 255, 0.14);
+        --success: #36c98b;
+        --danger: #ff6b6b;
+        --warning: #f4c65d;
+        --border: rgba(173, 196, 255, 0.2);
+        --shadow: 0 16px 40px rgba(3, 10, 20, 0.4);
+      }
+
+      body.light {
+        --bg: #edf3fb;
+        --bg-elev: #f7faff;
+        --panel: #ffffff;
+        --panel-alt: #eaf1ff;
+        --text: #112033;
+        --muted: #5a6e89;
+        --accent: #2f6ecf;
+        --accent-strong: #1d4ca1;
+        --accent-soft: rgba(47, 110, 207, 0.12);
+        --success: #1ea76d;
+        --danger: #d94d4d;
+        --warning: #cd9c14;
+        --border: rgba(17, 32, 51, 0.11);
+        --shadow: 0 12px 28px rgba(17, 32, 51, 0.1);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: linear-gradient(180deg, var(--bg) 0%, #0d1729 100%);
+        color: var(--text);
+        transition: background 0.25s ease, color 0.25s ease;
+      }
+
+      body.light {
+        background: linear-gradient(180deg, var(--bg) 0%, #dfeaf9 100%);
+      }
+
+      a { color: var(--accent); }
+      button, input, select, textarea {
+        font: inherit;
+      }
+
+      .app {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 20px 14px 50px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 18px 18px 14px;
+        position: sticky;
+        top: 0;
+        background: rgba(11, 18, 32, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 20;
+        border-bottom: 1px solid var(--border);
+      }
+
+      body.light .topbar {
+        background: rgba(237, 243, 251, 0.8);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        color: white;
+        font-size: 1.5rem;
+        box-shadow: var(--shadow);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.2rem, 2vw, 1.9rem);
+        letter-spacing: 0.02em;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .button, button {
+        border: 1px solid transparent;
+        border-radius: 12px;
+        padding: 0.78rem 1rem;
+        cursor: pointer;
+        font-weight: 700;
+        transition: 0.2s ease;
+        background: var(--panel);
+        color: var(--text);
+      }
+
+      .button:hover, button:hover {
+        transform: translateY(-1px);
+      }
+
+      .button.primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        color: white;
+      }
+
+      .button.secondary {
+        background: var(--panel-alt);
+        border-color: var(--border);
+      }
+
+      .button.danger {
+        background: rgba(255, 107, 107, 0.12);
+        color: var(--danger);
+        border-color: rgba(255, 107, 107, 0.22);
+      }
+
+      .button.success {
+        background: rgba(54, 201, 139, 0.12);
+        color: var(--success);
+        border-color: rgba(54, 201, 139, 0.2);
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 18px 0 20px;
+      }
+
+      .tab-button {
+        flex: 1 1 150px;
+        min-height: 48px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+
+      .tab-button.active {
+        background: var(--accent-soft);
+        border-color: rgba(90, 169, 255, 0.4);
+        color: var(--text);
+        box-shadow: inset 0 0 0 1px rgba(90, 169, 255, 0.25);
+      }
+
+      .tab-panel {
+        display: none;
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        background: rgba(22, 36, 55, 0.88);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      body.light .card {
+        background: rgba(255, 255, 255, 0.88);
+      }
+
+      h2, h3 {
+        margin-top: 0;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      label {
+        font-size: 0.9rem;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      input[type="text"], input[type="number"], select, textarea {
+        width: 100%;
+        background: rgba(10, 17, 27, 0.4);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        min-height: 48px;
+        padding: 0.8rem 0.9rem;
+      }
+
+      body.light input[type="text"],
+      body.light input[type="number"],
+      body.light select,
+      body.light textarea {
+        background: #f5f8ff;
+      }
+
+      textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .hint {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .row > * {
+        flex: 1 1 180px;
+      }
+
+      .inline-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.7rem;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        border: 1px solid rgba(90, 169, 255, 0.2);
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+
+      .question-list,
+      .preview-list,
+      .stat-grid,
+      .summary-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .question-item,
+      .preview-item {
+        background: rgba(14, 24, 37, 0.7);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      body.light .question-item,
+      body.light .preview-item {
+        background: rgba(246, 249, 255, 0.96);
+      }
+
+      .question-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+
+      .question-text {
+        font-family: Georgia, "Times New Roman", serif;
+        line-height: 1.6;
+        margin: 10px 0 12px;
+      }
+
+      .question-options {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .option {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: rgba(7, 14, 22, 0.2);
+      }
+
+      .option.correct {
+        background: rgba(54, 201, 139, 0.12);
+        border-color: rgba(54, 201, 139, 0.35);
+      }
+
+      .option.wrong {
+        background: rgba(255, 107, 107, 0.09);
+        border-color: rgba(255, 107, 107, 0.25);
+      }
+
+      .option-label {
+        min-width: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.28rem 0.52rem;
+        border-radius: 8px;
+        background: var(--accent-soft);
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .comment {
+        margin-top: 12px;
+        padding: 10px 12px;
+        border-left: 4px solid var(--accent);
+        background: rgba(90, 169, 255, 0.08);
+        border-radius: 10px;
+        color: var(--text);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .answer-result {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        margin-top: 12px;
+      }
+
+      .answer-result.success {
+        color: var(--success);
+      }
+
+      .answer-result.error {
+        color: var(--danger);
+      }
+
+      .stats-card {
+        background: linear-gradient(135deg, rgba(90, 169, 255, 0.13), rgba(21, 35, 53, 0.18));
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+      }
+
+      .stat-value {
+        font-size: clamp(1.6rem, 3vw, 2.3rem);
+        margin: 8px 0 0;
+        font-weight: 800;
+      }
+
+      .stat-label {
+        color: var(--muted);
+      }
+
+      .progress-wrap {
+        margin-top: 8px;
+        width: 100%;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--success));
+        width: 0;
+        transition: width 0.2s ease;
+      }
+
+      .warning-banner {
+        background: rgba(244, 198, 93, 0.12);
+        border: 1px solid rgba(244, 198, 93, 0.3);
+        color: #f7db8a;
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-bottom: 16px;
+        font-weight: 700;
+      }
+
+      .empty-state {
+        padding: 18px;
+        text-align: center;
+        border: 1px dashed var(--border);
+        border-radius: 16px;
+        color: var(--muted);
+        background: rgba(9, 15, 24, 0.16);
+      }
+
+      .toast {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        max-width: min(420px, calc(100vw - 24px));
+        padding: 12px 16px;
+        border-radius: 12px;
+        color: #fff;
+        background: rgba(16, 22, 29, 0.9);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        transform: translateY(20px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        z-index: 50;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .toast.success { background: rgba(31, 118, 86, 0.95); }
+      .toast.error { background: rgba(156, 44, 44, 0.96); }
+      .toast.info { background: rgba(18, 39, 57, 0.95); }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 11, 0.55);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 60;
+      }
+
+      .modal.visible {
+        display: flex;
+      }
+
+      .modal-card {
+        width: min(520px, calc(100vw - 32px));
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: var(--shadow);
+      }
+
+      .loader {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        border: 4px solid rgba(90, 169, 255, 0.2);
+        border-top-color: var(--accent);
+        animation: spin 0.9s linear infinite;
+        margin: 0 auto 12px;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      .hidden { display: none !important; }
+
+      @media (max-width: 760px) {
+        .app {
+          padding: 12px 12px 40px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 16px 12px 12px;
+        }
+
+        .header-actions {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .tab-button {
+          flex-basis: calc(50% - 8px);
+        }
+
+        .question-meta {
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body class="theme-dark">
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="badge">✦</div>
+          <div>
+            <h1>Banco de Questões CBR — Radiologia</h1>
+            <div class="subtitle">Estudo e revisão para a prova anual do CBR</div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button id="toggleTheme" class="button secondary" type="button">🌙 Tema</button>
+        </div>
+      </header>
+
+      <nav class="tabs" aria-label="Navegação principal">
+        <button class="tab-button active" type="button" data-tab="banco">Banco</button>
+        <button class="tab-button" type="button" data-tab="estudar">Estudar</button>
+        <button class="tab-button" type="button" data-tab="erros">Revisar Erros</button>
+        <button class="tab-button" type="button" data-tab="estatisticas">Estatísticas</button>
+        <button class="tab-button" type="button" data-tab="importar">Importar</button>
+      </nav>
+
+      <main>
+        <section id="tab-banco" class="tab-panel active">
+          <div class="grid">
+            <div class="card">
+              <h3>Cadastro manual</h3>
+              <form id="manualQuestionForm">
+                <div class="field">
+                  <label for="manualCategoria">Categoria</label>
+                  <select id="manualCategoria"></select>
+                </div>
+
+                <div class="field">
+                  <label for="manualPergunta">Enunciado</label>
+                  <textarea id="manualPergunta" placeholder="Escreva a pergunta e o contexto clínico/ radiológico…"></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="manualAltCount">Número de alternativas</label>
+                  <select id="manualAltCount">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4" selected>4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                  </select>
+                </div>
+
+                <div id="manualAlternatives"></div>
+
+                <div class="field">
+                  <label for="manualComentario">Comentário / explicação</label>
+                  <textarea id="manualComentario" placeholder="Explique a resposta correta, fundamentos e pontos de atenção…"></textarea>
+                </div>
+
+                <div class="actions">
+                  <button class="button primary" type="submit">Salvar questão</button>
+                  <button class="button secondary" id="resetManualForm" type="button">Limpar</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="card">
+              <div class="row" style="margin-bottom:12px;">
+                <div class="field" style="flex:1 1 200px; margin:0;">
+                  <label for="bankCategoriaFilter">Filtrar por categoria</label>
+                  <select id="bankCategoriaFilter"></select>
+                </div>
+              </div>
+              <div id="bankQuestionList" class="question-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-estudar" class="tab-panel">
+          <div class="card">
+            <div class="row" style="align-items:end;">
+              <div class="field" style="flex:1 1 220px; margin:0;">
+                <label for="studyCategoryFilter">Categoria</label>
+                <select id="studyCategoryFilter"></select>
+              </div>
+              <div style="flex:0 0 auto;">
+                <button id="studyRandomize" class="button primary" type="button">Sortear questão</button>
+              </div>
+            </div>
+          </div>
+          <div id="studyPanel" class="question-list" style="margin-top:18px;"></div>
+        </section>
+
+        <section id="tab-erros" class="tab-panel">
+          <div class="card">
+            <h3>Revisão de erros</h3>
+            <div id="errorPanel" class="question-list"></div>
+          </div>
+        </section>
+
+        <section id="tab-estatisticas" class="tab-panel">
+          <div class="summary-grid grid" id="statsSummary"></div>
+          <div class="card" style="margin-top:18px;">
+            <h3>Desempenho por categoria</h3>
+            <div id="categoryStats" class="question-list"></div>
+          </div>
+        </section>
+
+        <section id="tab-importar" class="tab-panel">
+          <div class="warning-banner">Revise sempre as questões geradas antes de estudar por elas — IA pode errar.</div>
+
+          <div class="grid">
+            <div class="card">
+              <h3>5a. Importar JSON/CSV exato</h3>
+              <div class="hint">Formato esperado: categoria, pergunta, alternativa1, alternativa2, alternativa3, alternativa4, correta (1–4), comentario.</div>
+              <div class="actions" style="margin-top:12px;">
+                <button id="downloadCsvTemplate" class="button secondary" type="button">Baixar modelo CSV</button>
+              </div>
+              <input id="jsonCsvImportInput" type="file" accept=".json,.csv" style="margin-top:12px; width:100%;" />
+            </div>
+
+            <div class="card">
+              <h3>5b. PDF/DOCX — parsing estrutural</h3>
+              <div class="field">
+                <label for="pdfDocxCategory">Categoria para as questões deste arquivo</label>
+                <select id="pdfDocxCategory"></select>
+              </div>
+              <input id="documentImportInput" type="file" accept=".pdf,.docx" style="width:100%;" />
+              <div id="documentPreview" class="preview-list" style="margin-top:14px;"></div>
+              <div class="actions" style="margin-top:12px;">
+                <button id="confirmDocumentImport" class="button primary" type="button">Adicionar questões confirmadas</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>5c. Geração grounded por IA</h3>
+              <div class="field">
+                <label for="aiQuantity">Quantidade de questões</label>
+                <input id="aiQuantity" type="number" min="5" max="100" value="10" />
+              </div>
+              <div class="field">
+                <label for="aiCategoryMode">Modo de categoria</label>
+                <select id="aiCategoryMode">
+                  <option value="auto">Distribuir por categorias presentes no material</option>
+                  <option value="fixed">Usar uma categoria fixa</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="aiFixedCategory">Categoria fixa</label>
+                <select id="aiFixedCategory"></select>
+              </div>
+              <div class="field">
+                <label for="aiMaterial">Material de estudo</label>
+                <textarea id="aiMaterial" placeholder="Cole texto, resumos, protocolos, tópicos ou anexe arquivos .txt/.md/.pdf…"></textarea>
+              </div>
+              <div class="field">
+                <label for="aiFiles">Arquivos de apoio (.txt, .md, .pdf)</label>
+                <input id="aiFiles" type="file" accept=".txt,.md,.pdf" multiple />
+              </div>
+              <div class="actions">
+                <button id="generateAiQuestions" class="button primary" type="button">Gerar questões</button>
+              </div>
+              <div id="aiPreview" class="preview-list" style="margin-top:14px;"></div>
+              <div class="actions" style="margin-top:12px;">
+                <button id="confirmAiBatch" class="button success" type="button">Adicionar todas as questões revisadas</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <div id="loadingModal" class="modal" aria-live="polite">
+      <div class="modal-card">
+        <div class="loader"></div>
+        <h3 id="loadingTitle">Processando…</h3>
+        <div id="loadingText" class="hint">Aguarde.</div>
+        <div class="progress-wrap">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://unpkg.com/mammoth@1.7.0/mammoth.browser.min.js"></script>
+    <script>
+      const STORAGE_KEY = 'bancoCbrRadiologia_v1';
+      const CATEGORIES = [
+        'Neurorradiologia',
+        'Tórax',
+        'Abdome',
+        'Músculo-esquelético',
+        'Mama',
+        'Pediatria',
+        'Cabeça e pescoço',
+        'Intervencionista',
+        'Genitourinário',
+        'Cardiovascular',
+        'Física/Proteção radiológica',
+        'Outra'
+      ];
+
+      const state = {
+        questions: [],
+        theme: 'dark'
+      };
+
+      let editingQuestionId = null;
+      let currentStudyQuestionId = null;
+      let currentErrorQuestionId = null;
+      let documentPreviewQuestions = [];
+      let aiPreviewQuestions = [];
+
+      const els = {
+        manualForm: document.getElementById('manualQuestionForm'),
+        manualCategoria: document.getElementById('manualCategoria'),
+        manualPergunta: document.getElementById('manualPergunta'),
+        manualAltCount: document.getElementById('manualAltCount'),
+        manualAlternatives: document.getElementById('manualAlternatives'),
+        manualComentario: document.getElementById('manualComentario'),
+        bankCategoriaFilter: document.getElementById('bankCategoriaFilter'),
+        bankQuestionList: document.getElementById('bankQuestionList'),
+        studyCategoryFilter: document.getElementById('studyCategoryFilter'),
+        studyPanel: document.getElementById('studyPanel'),
+        errorPanel: document.getElementById('errorPanel'),
+        statsSummary: document.getElementById('statsSummary'),
+        categoryStats: document.getElementById('categoryStats'),
+        jsonCsvImportInput: document.getElementById('jsonCsvImportInput'),
+        documentImportInput: document.getElementById('documentImportInput'),
+        documentPreview: document.getElementById('documentPreview'),
+        downloadCsvTemplate: document.getElementById('downloadCsvTemplate'),
+        toggleTheme: document.getElementById('toggleTheme'),
+        aiQuantity: document.getElementById('aiQuantity'),
+        aiCategoryMode: document.getElementById('aiCategoryMode'),
+        aiFixedCategory: document.getElementById('aiFixedCategory'),
+        aiMaterial: document.getElementById('aiMaterial'),
+        aiFiles: document.getElementById('aiFiles'),
+        aiPreview: document.getElementById('aiPreview'),
+        pdfDocxCategory: document.getElementById('pdfDocxCategory'),
+        generateAiQuestions: document.getElementById('generateAiQuestions'),
+        confirmAiBatch: document.getElementById('confirmAiBatch'),
+        confirmDocumentImport: document.getElementById('confirmDocumentImport'),
+        loadingModal: document.getElementById('loadingModal'),
+        loadingTitle: document.getElementById('loadingTitle'),
+        loadingText: document.getElementById('loadingText'),
+        progressBar: document.getElementById('progressBar'),
+        toast: document.getElementById('toast'),
+        resetManualForm: document.getElementById('resetManualForm')
+      };
+
+      function safeId() {
+        if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+        return 'q-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+      }
+
+      function showToast(message, type = 'info') {
+        els.toast.textContent = message;
+        els.toast.className = 'toast show ' + type;
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => {
+          els.toast.className = 'toast';
+        }, 2600);
+      }
+
+      function showLoading(title, text, progressValue = 0) {
+        els.loadingTitle.textContent = title;
+        els.loadingText.textContent = text;
+        els.progressBar.style.width = Math.max(0, Math.min(100, progressValue)) + '%';
+        els.loadingModal.classList.add('visible');
+      }
+
+      function hideLoading() {
+        els.loadingModal.classList.remove('visible');
+      }
+
+      function normalizeCategory(value) {
+        if (!value) return 'Outra';
+        return CATEGORIES.includes(value) ? value : 'Outra';
+      }
+
+      function loadState() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (!saved) {
+            state.questions = [];
+            state.theme = 'dark';
+            return;
+          }
+          const parsed = JSON.parse(saved);
+          state.questions = Array.isArray(parsed.questions) ? parsed.questions : [];
+          state.theme = parsed.theme === 'light' ? 'light' : 'dark';
+        } catch (error) {
+          console.error('Erro ao carregar localStorage:', error);
+          showToast('Não foi possível carregar o banco salvo. O app iniciou em estado limpo.', 'error');
+          state.questions = [];
+          state.theme = 'dark';
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (error) {
+          console.error('Erro ao salvar localStorage:', error);
+          showToast('Não foi possível salvar as alterações no navegador. Verifique o espaço ou permissões.', 'error');
+          throw error;
+        }
+      }
+
+      function fillCategorySelects() {
+        const options = CATEGORIES.map((category) => `<option value="${category}">${category}</option>`).join('');
+        els.manualCategoria.innerHTML = options;
+        els.bankCategoriaFilter.innerHTML = '<option value="all">Todas as categorias</option>' + options;
+        els.studyCategoryFilter.innerHTML = '<option value="all">Todas as categorias</option>' + options;
+        els.pdfDocxCategory.innerHTML = options;
+        els.aiFixedCategory.innerHTML = options;
+      }
+
+      function renderManualAlternatives() {
+        const count = Number(els.manualAltCount.value || 4);
+        const currentValues = Array.from({ length: count }, (_, i) => {
+          const field = document.querySelector(`input[name="manualAlt_${i + 1}"]`);
+          return field ? field.value : '';
+        });
+
+        let html = '';
+        for (let i = 0; i < count; i++) {
+          const letter = String.fromCharCode(65 + i);
+          html += `
+            <div class="field">
+              <label>Alternativa ${letter}</label>
+              <div class="row">
+                <input type="text" name="manualAlt_${i + 1}" value="${escapeHtml(currentValues[i] || '')}" placeholder="Digite a alternativa ${letter}…" />
+                <label style="display:flex; align-items:center; justify-content:center; min-width:140px; margin:0; gap:8px;">
+                  <input type="radio" name="manualCorrect" value="${i}" checked="${i === 0 ? 'checked' : ''}" />
+                  Correta
+                </label>
+              </div>
+            </div>
+          `;
+        }
+        els.manualAlternatives.innerHTML = html;
+
+        const checkedRadios = document.querySelectorAll('input[name="manualCorrect"]');
+        checkedRadios.forEach((radio) => {
+          radio.checked = false;
+        });
+
+        if (checkedRadios.length) {
+          checkedRadios[0].checked = true;
+        }
+
+        if (editingQuestionId) {
+          const question = state.questions.find((q) => q.id === editingQuestionId);
+          if (question) {
+            const correctIndex = Number(question.correta);
+            if (checkedRadios[correctIndex]) checkedRadios[correctIndex].checked = true;
+          }
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function readManualFormData() {
+        const count = Number(els.manualAltCount.value || 4);
+        const alternatives = [];
+        for (let i = 0; i < count; i++) {
+          const value = document.querySelector(`input[name="manualAlt_${i + 1}"]`)?.value?.trim() || '';
+          alternatives.push(value);
+        }
+        const correctInput = document.querySelector('input[name="manualCorrect"]:checked');
+        const correctIndex = Number(correctInput?.value ?? 0);
+
+        return {
+          categoria: normalizeCategory(els.manualCategoria.value),
+          pergunta: els.manualPergunta.value.trim(),
+          alternativas,
+          correta: correctIndex,
+          comentario: els.manualComentario.value.trim()
+        };
+      }
+
+      function resetManualForm() {
+        editingQuestionId = null;
+        els.manualForm.reset();
+        els.manualCategoria.value = CATEGORIES[0];
+        els.manualAltCount.value = '4';
+        els.manualPergunta.value = '';
+        els.manualComentario.value = '';
+        renderManualAlternatives();
+        showToast('Formulário limpo.', 'info');
+      }
+
+      function renderQuestionList() {
+        const filter = els.bankCategoriaFilter.value;
+        const filtered = filter === 'all'
+          ? [...state.questions]
+          : state.questions.filter((q) => q.categoria === filter);
+
+        if (!filtered.length) {
+          els.bankQuestionList.innerHTML = '<div class="empty-state">Nenhuma questão cadastrada nesta categoria. Cadastre uma manualmente ou importe um arquivo para começar.</div>';
+          return;
+        }
+
+        filtered.sort((a, b) => (b.id > a.id ? 1 : -1));
+        els.bankQuestionList.innerHTML = filtered.map((question) => {
+          const statusLabel = question.ultimoResultado === 'certo' ? '✅ Certo' : question.ultimoResultado === 'errado' ? '❌ Errado' : '⏳ Sem registro';
+          return `
+            <article class="question-item">
+              <div class="question-meta">
+                <span class="inline-badge">${escapeHtml(question.categoria)}</span>
+                <span class="hint">${statusLabel}</span>
+              </div>
+              <div class="question-text">${escapeHtml(question.pergunta)}</div>
+              <div class="question-options">
+                ${question.alternativas.map((alt, i) => `
+                  <div class="option ${i === Number(question.correta) ? 'correct' : ''}">
+                    <span class="option-label">${String.fromCharCode(65 + i)}</span>
+                    <span>${escapeHtml(alt)}</span>
+                  </div>
+                `).join('')}
+              </div>
+              ${question.comentario ? `<div class="comment"><strong>Comentário:</strong> ${escapeHtml(question.comentario)}</div>` : ''}
+              <div class="hint" style="margin-top:10px;">Acertos: ${Number(question.acertos || 0)} · Erros: ${Number(question.erros || 0)}</div>
+              <div class="actions">
+                <button class="button secondary" type="button" data-action="edit" data-id="${question.id}">Editar</button>
+                <button class="button danger" type="button" data-action="delete" data-id="${question.id}">Excluir</button>
+              </div>
+            </article>
+          `;
+        }).join('');
+      }
+
+      function renderStudyPanel() {
+        const filter = els.studyCategoryFilter.value;
+        const pool = filter === 'all' ? state.questions : state.questions.filter((q) => q.categoria === filter);
+
+        if (!pool.length) {
+          els.studyPanel.innerHTML = '<div class="empty-state">Nenhuma questão disponível para estudo. Adicione ou importe questões primeiro.</div>';
+          return;
+        }
+
+        if (!currentStudyQuestionId || !pool.some((q) => q.id === currentStudyQuestionId)) {
+          currentStudyQuestionId = pool[Math.floor(Math.random() * pool.length)].id;
+        }
+
+        const question = state.questions.find((q) => q.id === currentStudyQuestionId);
+        if (!question) {
+          els.studyPanel.innerHTML = '<div class="empty-state">Questão não encontrada. Sorteie outra.</div>';
+          return;
+        }
+
+        const selectedAnswer = Number(question.lastSelected ?? -1);
+        const solved = typeof question.lastSelected === 'number';
+        const isCorrect = solved && Number(question.lastSelected) === Number(question.correta);
+
+        els.studyPanel.innerHTML = `
+          <article class="question-item">
+            <div class="question-meta">
+              <span class="inline-badge">${escapeHtml(question.categoria)}</span>
+              <span class="hint">Acertos: ${question.acertos || 0} · Erros: ${question.erros || 0}</span>
+            </div>
+            <div class="question-text">${escapeHtml(question.pergunta)}</div>
+            <div class="question-options">
+              ${question.alternativas.map((alt, index) => {
+                let className = '';
+                const isSelected = index === selectedAnswer;
+                if (solved) {
+                  if (index === Number(question.correta)) className = 'correct';
+                  if (isSelected && index !== Number(question.correta)) className = 'wrong';
+                }
+                const locked = solved ? 'disabled' : '';
+                const attached = solved ? '' : `data-study-answer="${index}"`;
+                return `
+                  <button type="button" class="option ${className}" ${attached} data-id="${question.id}" ${locked} style="width:100%; text-align:left; justify-content:flex-start; border:none; cursor:pointer; opacity:${solved ? 0.96 : 1};">
+                    <span class="option-label">${String.fromCharCode(65 + index)}</span>
+                    <span>${escapeHtml(alt)}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+            ${solved ? `
+              <div class="answer-result ${isCorrect ? 'success' : 'error'}">
+                ${isCorrect ? '✅ Resposta correta!' : '❌ Resposta incorreta.'}
+              </div>
+            ` : ''}
+            ${question.comentario ? `<div class="comment"><strong>Comentário:</strong> ${escapeHtml(question.comentario)}</div>` : ''}
+            <div class="actions">
+              <button class="button primary" type="button" id="studyNextQuestion">Próxima questão</button>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderErrorPanel() {
+        const wrongQuestions = state.questions.filter((q) => q.ultimoResultado === 'errado');
+
+        if (!wrongQuestions.length) {
+          els.errorPanel.innerHTML = '<div class="empty-state">Nenhum erro para revisar. Quando responder uma questão incorretamente, ela aparecerá aqui.</div>';
+          return;
+        }
+
+        if (!currentErrorQuestionId || !wrongQuestions.some((q) => q.id === currentErrorQuestionId)) {
+          currentErrorQuestionId = wrongQuestions[0].id;
+        }
+
+        const question = wrongQuestions.find((q) => q.id === currentErrorQuestionId) || wrongQuestions[0];
+        const selectedAnswer = Number(question.lastSelected ?? -1);
+        const solved = typeof question.lastSelected === 'number';
+        const isCorrect = solved && Number(question.lastSelected) === Number(question.correta);
+
+        els.errorPanel.innerHTML = `
+          <article class="question-item">
+            <div class="question-meta">
+              <span class="inline-badge">${escapeHtml(question.categoria)}</span>
+              <span class="hint">Erro ${wrongQuestions.findIndex((q) => q.id === question.id) + 1} de ${wrongQuestions.length}</span>
+            </div>
+            <div class="question-text">${escapeHtml(question.pergunta)}</div>
+            <div class="question-options">
+              ${question.alternativas.map((alt, index) => {
+                let className = '';
+                if (solved) {
+                  if (index === Number(question.correta)) className = 'correct';
+                  if (index === selectedAnswer && index !== Number(question.correta)) className = 'wrong';
+                }
+                return `
+                  <button type="button" class="option ${className}" data-error-answer="${index}" data-id="${question.id}" style="width:100%; text-align:left; justify-content:flex-start; border:none; cursor:pointer;">
+                    <span class="option-label">${String.fromCharCode(65 + index)}</span>
+                    <span>${escapeHtml(alt)}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+            ${solved ? `
+              <div class="answer-result ${isCorrect ? 'success' : 'error'}">
+                ${isCorrect ? '✅ Parabéns! Essa questão saiu da revisão de erros.' : '❌ Ainda não foi desta vez. Tente novamente.'}
+              </div>
+            ` : ''}
+            ${question.comentario ? `<div class="comment"><strong>Comentário:</strong> ${escapeHtml(question.comentario)}</div>` : ''}
+            <div class="actions">
+              <button class="button secondary" type="button" id="nextErrorQuestion">Próxima questão em erro</button>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderStatsSummary() {
+        const totalQuestions = state.questions.length;
+        const totalAcertos = state.questions.reduce((sum, q) => sum + Number(q.acertos || 0), 0);
+        const totalErros = state.questions.reduce((sum, q) => sum + Number(q.erros || 0), 0);
+        const attempts = totalAcertos + totalErros;
+        const accuracy = attempts ? (totalAcertos / attempts) * 100 : 0;
+        const pending = state.questions.filter((q) => q.ultimoResultado === 'errado').length;
+
+        els.statsSummary.innerHTML = `
+          <div class="stats-card">
+            <div class="stat-label">% de acerto geral</div>
+            <div class="stat-value">${accuracy.toFixed(1)}%</div>
+            <div class="progress-wrap"><div class="progress-bar" style="width:${accuracy}%"></div></div>
+          </div>
+          <div class="stats-card">
+            <div class="stat-label">Questões cadastradas</div>
+            <div class="stat-value">${totalQuestions}</div>
+          </div>
+          <div class="stats-card">
+            <div class="stat-label">Respostas certas</div>
+            <div class="stat-value">${totalAcertos}</div>
+          </div>
+          <div class="stats-card">
+            <div class="stat-label">Respostas erradas</div>
+            <div class="stat-value">${totalErros}</div>
+          </div>
+          <div class="stats-card">
+            <div class="stat-label">Pendentes de revisão</div>
+            <div class="stat-value">${pending}</div>
+          </div>
+        `;
+      }
+
+      function renderCategoryStats() {
+        const grouped = {};
+        CATEGORIES.forEach((category) => {
+          grouped[category] = { acertos: 0, erros: 0 };
+        });
+
+        state.questions.forEach((q) => {
+          const category = normalizeCategory(q.categoria);
+          grouped[category].acertos += Number(q.acertos || 0);
+          grouped[category].erros += Number(q.erros || 0);
+        });
+
+        const entries = Object.entries(grouped).filter(([_, value]) => value.acertos || value.erros);
+
+        if (!entries.length) {
+          els.categoryStats.innerHTML = '<div class="empty-state">Ainda não há estatísticas por categoria. Faça uma pergunta ou importe um banco para começar.</div>';
+          return;
+        }
+
+        els.categoryStats.innerHTML = entries.map(([category, stats]) => {
+          const total = stats.acertos + stats.erros;
+          const percent = total ? (stats.acertos / total) * 100 : 0;
+          return `
+            <div class="question-item">
+              <div class="question-meta">
+                <strong>${escapeHtml(category)}</strong>
+                <span class="hint">${percent.toFixed(1)}% de acerto</span>
+              </div>
+              <div class="progress-wrap">
+                <div class="progress-bar" style="width:${percent}%"></div>
+              </div>
+              <div class="hint" style="margin-top:8px;">Acertos: ${stats.acertos} · Erros: ${stats.erros}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function renderAll() {
+        renderManualAlternatives();
+        renderQuestionList();
+        renderStudyPanel();
+        renderErrorPanel();
+        renderStatsSummary();
+        renderCategoryStats();
+      }
+
+      function addQuestion(questionData) {
+        const cleanAlternatives = questionData.alternativas.filter((alt) => String(alt).trim());
+        if (cleanAlternatives.length < 2 || cleanAlternatives.length > 6) {
+          throw new Error('A questão precisa ter entre 2 e 6 alternativas válidas.');
+        }
+        if (!Number.isInteger(Number(questionData.correta)) || Number(questionData.correta) < 0 || Number(questionData.correta) >= cleanAlternatives.length) {
+          throw new Error('A alternativa correta deve corresponder a um índice válido da questão.');
+        }
+        if (!questionData.pergunta || !String(questionData.pergunta).trim()) {
+          throw new Error('O enunciado da questão não pode ficar vazio.');
+        }
+
+        const question = {
+          id: questionData.id || safeId(),
+          categoria: normalizeCategory(questionData.categoria),
+          pergunta: questionData.pergunta.trim(),
+          alternativas: cleanAlternatives.map((alt) => String(alt).trim()),
+          correta: Number(questionData.correta),
+          comentario: questionData.comentario ? String(questionData.comentario).trim() : '',
+          acertos: Number(questionData.acertos || 0),
+          erros: Number(questionData.erros || 0),
+          ultimoResultado: questionData.ultimoResultado || null,
+          lastSelected: questionData.lastSelected ?? null
+        };
+
+        const index = state.questions.findIndex((q) => q.id === question.id);
+        if (index >= 0) {
+          state.questions[index] = { ...state.questions[index], ...question };
+        } else {
+          state.questions.push(question);
+        }
+
+        saveState();
+      }
+
+      function submitManualQuestion(event) {
+        event.preventDefault();
+        try {
+          const data = readManualFormData();
+          if (!data.pergunta) {
+            throw new Error('Escreva o enunciado da questão antes de salvar.');
+          }
+          const question = {
+            id: editingQuestionId || safeId(),
+            categoria: data.categoria,
+            pergunta: data.pergunta,
+            alternativas: data.alternativas,
+            correta: data.correta,
+            comentario: data.comentario,
+            acertos: 0,
+            erros: 0,
+            ultimoResultado: null,
+            lastSelected: null
+          };
+
+          const existing = state.questions.find((q) => q.id === question.id);
+          if (existing) {
+            question.acertos = existing.acertos || 0;
+            question.erros = existing.erros || 0;
+            question.ultimoResultado = existing.ultimoResultado || null;
+            question.lastSelected = existing.lastSelected || null;
+          }
+
+          addQuestion(question);
+          showToast(editingQuestionId ? 'Questão atualizada com sucesso.' : 'Questão cadastrada com sucesso.', 'success');
+          resetManualForm();
+          renderAll();
+        } catch (error) {
+          console.error(error);
+          showToast(error.message || 'Erro ao salvar a questão.', 'error');
+        }
+      }
+
+      function handleBankActions(event) {
+        const button = event.target.closest('[data-action]');
+        if (!button) return;
+
+        const { action, id } = button.dataset;
+        const index = state.questions.findIndex((q) => q.id === id);
+        if (index === -1) return;
+
+        if (action === 'edit') {
+          const question = state.questions[index];
+          editingQuestionId = question.id;
+          els.manualCategoria.value = question.categoria;
+          els.manualPergunta.value = question.pergunta;
+          els.manualAltCount.value = String(question.alternativas.length);
+          els.manualComentario.value = question.comentario || '';
+          renderManualAlternatives();
+
+          const inputs = Array.from(document.querySelectorAll('input[name="manualAlt_1"], input[name="manualAlt_2"], input[name="manualAlt_3"], input[name="manualAlt_4"], input[name="manualAlt_5"], input[name="manualAlt_6"]'));
+          question.alternativas.forEach((alt, indexAlt) => {
+            const input = document.querySelector(`input[name="manualAlt_${indexAlt + 1}"]`);
+            if (input) input.value = alt;
+          });
+          const correctRadio = document.querySelector(`input[name="manualCorrect"][value="${question.correta}"]`);
+          if (correctRadio) correctRadio.checked = true;
+
+          const bankTab = document.querySelector('[data-tab="banco"]');
+          if (bankTab) bankTab.click();
+          showToast('Questão carregada para edição.', 'info');
+          return;
+        }
+
+        if (action === 'delete') {
+          const ok = window.confirm('Deseja excluir esta questão permanentemente?');
+          if (!ok) return;
+          state.questions.splice(index, 1);
+          try {
+            saveState();
+            showToast('Questão removida do banco.', 'success');
+            renderAll();
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      }
+
+      function handleStudySelection(event) {
+        const answerButton = event.target.closest('[data-study-answer]');
+        if (!answerButton) return;
+
+        const question = state.questions.find((q) => q.id === answerButton.dataset.id);
+        if (!question) return;
+
+        const selectedIndex = Number(answerButton.dataset.studyAnswer);
+        const isCorrect = selectedIndex === Number(question.correta);
+        question.lastSelected = selectedIndex;
+        question.ultimoResultado = isCorrect ? 'certo' : 'errado';
+        if (isCorrect) {
+          question.acertos = Number(question.acertos || 0) + 1;
+        } else {
+          question.erros = Number(question.erros || 0) + 1;
+        }
+
+        try {
+          saveState();
+          showToast(isCorrect ? 'Resposta correta.' : 'Resposta incorreta — revise esse tema.', isCorrect ? 'success' : 'error');
+        } catch (error) {
+          console.error(error);
+        }
+
+        renderAll();
+      }
+
+      function handleErrorSelection(event) {
+        const answerButton = event.target.closest('[data-error-answer]');
+        if (!answerButton) return;
+
+        const question = state.questions.find((q) => q.id === answerButton.dataset.id);
+        if (!question) return;
+
+        const selectedIndex = Number(answerButton.dataset.errorAnswer);
+        const isCorrect = selectedIndex === Number(question.correta);
+        question.lastSelected = selectedIndex;
+        question.ultimoResultado = isCorrect ? 'certo' : 'errado';
+        if (isCorrect) {
+          question.acertos = Number(question.acertos || 0) + 1;
+        } else {
+          question.erros = Number(question.erros || 0) + 1;
+        }
+
+        try {
+          saveState();
+          showToast(isCorrect ? 'Questão acertada. Saiu da revisão de erros.' : 'Ainda está na revisão de erros.', isCorrect ? 'success' : 'error');
+        } catch (error) {
+          console.error(error);
+        }
+
+        if (isCorrect) {
+          const wrongQuestions = state.questions.filter((q) => q.ultimoResultado === 'errado');
+          currentErrorQuestionId = wrongQuestions[0]?.id || null;
+        }
+
+        renderAll();
+      }
+
+      function randomizeStudyQuestion() {
+        const filter = els.studyCategoryFilter.value;
+        const pool = filter === 'all' ? state.questions : state.questions.filter((q) => q.categoria === filter);
+        if (!pool.length) {
+          showToast('Nenhuma questão disponível para esse filtro.', 'info');
+          currentStudyQuestionId = null;
+          renderStudyPanel();
+          return;
+        }
+        currentStudyQuestionId = pool[Math.floor(Math.random() * pool.length)].id;
+        renderStudyPanel();
+        showToast('Questão sorteada.', 'info');
+      }
+
+      function parseCsv(text) {
+        const rows = [];
+        let current = '';
+        let row = [];
+        let inQuotes = false;
+
+        for (let i = 0; i < text.length; i++) {
+          const char = text[i];
+          if (char === '"') {
+            if (inQuotes && text[i + 1] === '"') {
+              current += '"';
+              i++;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (char === ',' && !inQuotes) {
+            row.push(current);
+            current = '';
+          } else if ((char === '\n' || char === '\r') && !inQuotes) {
+            if (char === '\r' && text[i + 1] === '\n') i++;
+            row.push(current);
+            current = '';
+            if (row.some((v) => String(v).trim() !== '')) rows.push(row);
+            row = [];
+          } else {
+            current += char;
+          }
+        }
+
+        if (current.length || row.length) {
+          row.push(current);
+          if (row.some((v) => String(v).trim() !== '')) rows.push(row);
+        }
+
+        if (!rows.length) return [];
+        const headers = rows[0].map((h) => h.trim().toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/gi, ''));
+        const normalizedHeaders = headers.map((h) => h === 'alternativa1' ? 'alternativa1' : h);
+        const dataRows = rows.slice(1).filter((rowValues) => rowValues.some((v) => String(v).trim() !== ''));
+        return dataRows.map((rowValue) => {
+          const obj = {};
+          normalizedHeaders.forEach((header, index) => {
+            obj[header] = (rowValue[index] || '').trim();
+          });
+          return obj;
+        });
+      }
+
+      function importJsonOrCsv(file) {
+        if (!file) return;
+        const lower = file.name.toLowerCase();
+        const isCsv = lower.endsWith('.csv');
+        const isJson = lower.endsWith('.json');
+        if (!isCsv && !isJson) {
+          showToast('Arquivo inválido. Use .json ou .csv.', 'error');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          try {
+            const text = String(event.target.result || '');
+            let rows = [];
+            if (isJson) {
+              const parsed = JSON.parse(text);
+              if (Array.isArray(parsed)) rows = parsed;
+              else if (parsed && Array.isArray(parsed.questoes)) rows = parsed.questoes;
+              else throw new Error('JSON inválido. Esperado array de objetos ou { questoes: [...] }.');
+            } else {
+              rows = parseCsv(text);
+            }
+
+            const imported = [];
+            rows.forEach((item, index) => {
+              const normalized = {
+                categoria: String(item.categoria || item.categoriaquestion || item.area || 'Outra').trim(),
+                pergunta: String(item.pergunta || item.questao || item.enunciado || '').trim(),
+                alternativa1: String(item.alternativa1 || item.alt1 || item.a || '').trim(),
+                alternativa2: String(item.alternativa2 || item.alt2 || item.b || '').trim(),
+                alternativa3: String(item.alternativa3 || item.alt3 || item.c || '').trim(),
+                alternativa4: String(item.alternativa4 || item.alt4 || item.d || '').trim(),
+                correta: String(item.correta || item.respostacorreta || item.resposta || '1').trim(),
+                comentario: String(item.comentario || item.explicacao || item.comentário || '').trim()
+              };
+
+              if (!normalized.categoria || !normalized.pergunta || !normalized.alternativa1 || !normalized.alternativa2 || !normalized.alternativa3 || !normalized.alternativa4) {
+                throw new Error(`Linha ${index + 2}: faltam campos obrigatórios (categoria, pergunta, alternativas ou correta).`);
+              }
+
+              const correctNumber = Number(normalized.correta);
+              if (!Number.isInteger(correctNumber) || correctNumber < 1 || correctNumber > 4) {
+                throw new Error(`Linha ${index + 2}: a coluna correta deve conter um valor entre 1 e 4.`);
+              }
+
+              const alternatives = [normalized.alternativa1, normalized.alternativa2, normalized.alternativa3, normalized.alternativa4];
+              imported.push({
+                categoria: normalizeCategory(normalized.categoria),
+                pergunta: normalized.pergunta,
+                alternativas: alternatives,
+                correta: correctNumber - 1,
+                comentario: normalized.comentario,
+                acertos: 0,
+                erros: 0,
+                ultimoResultado: null,
+                lastSelected: null
+              });
+            });
+
+            if (!imported.length) {
+              throw new Error('Nenhuma questão válida foi encontrada no arquivo importado.');
+            }
+
+            imported.forEach((question) => addQuestion(question));
+            renderAll();
+            showToast(`${imported.length} questão(ões) importada(s) com sucesso.`, 'success');
+          } catch (error) {
+            console.error(error);
+            showToast(error.message || 'Falha ao importar o arquivo.', 'error');
+          }
+        };
+
+        reader.onerror = function () {
+          showToast('Falha ao ler o arquivo selecionado.', 'error');
+        };
+        reader.readAsText(file);
+      }
+
+      function downloadCsvTemplate() {
+        const header = 'categoria,pergunta,alternativa1,alternativa2,alternativa3,alternativa4,correta,comentario\n';
+        const sample = 'Tórax,"Qual imagem é mais adequada para avaliar derrame pleural?","Radiografia simples do tórax","Tomografia computadorizada sem contraste","Ressonância magnética","Ultrassonografia","1","O derrame pleural é geralmente avaliado inicialmente com radiografia de tórax."';
+        const blob = new Blob([header + sample], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'modelo_cbr_radiologia.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function sanitizeDocumentText(inputText) {
+        let text = String(inputText || '').replace(/\r/g, '\n');
+        const irrelevantPatterns = [
+          /leia\s+atentamente/gi,
+          /n[ãa]o\s+e\s+permitido/gi,
+          /não\s+é\s+permitido/gi,
+          /cart[ãa]o[-\s]*resposta/gi,
+          /fiscal\s+de\s+sala/gi,
+          /direitos\s+autorais/gi,
+          /capa/gi,
+          /prova\s+de\s+radiologia/gi,
+          /assine\s+sua\s+prova/gi,
+          /leia\s+o\s+enunciado/gi,
+          /p[aá]gina\s*\d+/gi,
+          /\b\d+\b(?=\s*(?:de|\)|\]|\.|,|$))/g,
+          /\b[A-Z]{2,}\s*\d+\b/g
+        ];
+
+        irrelevantPatterns.forEach((pattern) => {
+          text = text.replace(pattern, ' ');
+        });
+
+        text = text.replace(/\n{3,}/g, '\n\n');
+        text = text.replace(/[ \t]{2,}/g, ' ');
+        text = text.replace(/\s+\n/g, '\n');
+        text = text.replace(/\n\s+/g, '\n');
+        return text.trim();
+      }
+
+      function extractQuestionsFromText(text) {
+        const cleaned = sanitizeDocumentText(text);
+        const blocks = cleaned.split(/(?=\b(?:Quest[ãa]o|Question)\s*(?:\d+|\s*[:.-])?\b)|(?=\b\d+\.?\s+[A-ZÀ-Ü])|(?=\b\d+\.[A-ZÀ-Ü])|(?=\b\d+[\).]\s+[A-ZÀ-Ü])/i);
+        const candidates = [];
+
+        blocks.forEach((block) => {
+          if (!block || block.trim().length < 30) return;
+          const lines = block.split(/\n+/).map((ln) => ln.trim()).filter(Boolean);
+          if (lines.length < 2) return;
+
+          const merged = lines.join(' ');
+          const optionMatches = merged.match(/(?:^|\s)([A-D])\s*\)\s*([^\n]+)/gi);
+          if (!optionMatches || optionMatches.length < 2) return;
+
+          const questionText = lines.filter((ln) => !/^[A-D]\s*\)/i.test(ln)).join(' ').replace(/\s+/g, ' ').trim();
+          if (!questionText) return;
+
+          const alternatives = [];
+          const optionPattern = /([A-D])\s*\)\s*([^\n]+)/gi;
+          let match;
+          while ((match = optionPattern.exec(merged)) !== null) {
+            alternatives.push(match[2].trim());
+          }
+
+          if (alternatives.length < 2 || alternatives.length > 6) return;
+
+          let correctAnswer = null;
+          const gabaritoMatch = merged.match(/(?:gabarito|resposta\s*certa|resposta\s*\:|\b\d+\s*[-:]\s*([A-D])\b|\b(?:quest[ãa]o|question)\s*\d+\s*[-:]\s*([A-D])\b)/i);
+          if (gabaritoMatch) {
+            const matchValue = gabaritoMatch[1] || gabaritoMatch[2];
+            if (matchValue) correctAnswer = matchValue.toUpperCase();
+          }
+
+          const normalizedQuestion = {
+            categoria: 'Outra',
+            pergunta: questionText,
+            alternativas,
+            correta: correctAnswer ? correctAnswer.charCodeAt(0) - 65 : null,
+            comentario: '',
+            needsConfirmation: correctAnswer === null,
+            source: 'document'
+          };
+
+          candidates.push(normalizedQuestion);
+        });
+
+        if (!candidates.length) {
+          const fallback = cleaned.split(/(?=\b(?:A|B|C|D)\s*\))/g);
+          fallback.forEach((block) => {
+            const options = [];
+            const letters = ['A', 'B', 'C', 'D'];
+            letters.forEach((letter) => {
+              const match = block.match(new RegExp(letter + '\\s*\\)\\s*([^\\n]+)', 'i'));
+              if (match) options.push(match[1].trim());
+            });
+            if (options.length >= 2) {
+              const mainText = block.replace(/\b(?:[A-D])\s*\)\s*[^\n]+/gi, '').replace(/\s+/g, ' ').trim();
+              if (mainText) {
+                candidates.push({
+                  categoria: 'Outra',
+                  pergunta: mainText,
+                  alternativas: options,
+                  correta: null,
+                  comentario: '',
+                  needsConfirmation: true,
+                  source: 'document'
+                });
+              }
+            }
+          });
+        }
+
+        return candidates.slice(0, 200);
+      }
+
+      function renderDocumentPreview(items) {
+        if (!items.length) {
+          els.documentPreview.innerHTML = '<div class="empty-state">Nenhuma questão estruturada foi reconhecida. O layout do arquivo pode não seguir o padrão de prova do CBR.</div>';
+          return;
+        }
+
+        els.documentPreview.innerHTML = items.map((item, index) => `
+          <div class="preview-item">
+            <div class="question-meta">
+              <span class="inline-badge">Prévia ${index + 1}</span>
+              <span class="hint">${item.needsConfirmation ? '⚠️ confirme a resposta' : 'Gabarito detectado'}</span>
+            </div>
+            <div class="question-text">${escapeHtml(item.pergunta)}</div>
+            <div class="question-options">
+              ${item.alternativas.map((alt, altIndex) => `
+                <label class="option ${item.correta === altIndex ? 'correct' : ''}" style="display:flex; align-items:center; width:100%; justify-content:space-between;">
+                  <span style="display:flex; align-items:flex-start; gap:10px; flex:1;">
+                    <span class="option-label">${String.fromCharCode(65 + altIndex)}</span>
+                    <span>${escapeHtml(alt)}</span>
+                  </span>
+                  <input type="radio" name="docCorrect_${index}" value="${altIndex}" ${item.correta === altIndex ? 'checked' : ''} ${item.needsConfirmation ? '' : 'disabled'} />
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      async function parsePdfFile(file) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          text += content.items.map((item) => item.str).join(' ') + '\n';
+        }
+        return text;
+      }
+
+      async function parseDocxFile(file) {
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        return result.value || '';
+      }
+
+      async function handleDocumentImport(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        try {
+          showLoading('Processando arquivo', 'Extraindo texto e reconhecendo padrões de prova…', 5);
+          let extractedText = '';
+          if (file.name.toLowerCase().endsWith('.pdf')) {
+            extractedText = await parsePdfFile(file);
+          } else if (file.name.toLowerCase().endsWith('.docx')) {
+            extractedText = await parseDocxFile(file);
+          } else {
+            throw new Error('Use um arquivo PDF ou DOCX neste fluxo.');
+          }
+
+          if (!extractedText || !extractedText.trim()) {
+            throw new Error('Nenhum texto foi reconhecido no arquivo. Verifique se o PDF está com texto selecionável ou se o DOCX contém conteúdo textual.');
+          }
+
+          const candidates = extractQuestionsFromText(extractedText);
+          if (!candidates.length) {
+            throw new Error('Não foi possível reconhecer questões estruturadas neste arquivo. O layout pode estar muito diferente do padrão da prova CBR ou o PDF pode estar escaneado sem texto.');
+          }
+
+          documentPreviewQuestions = candidates.map((candidate) => ({
+            ...candidate,
+            categoria: normalizeCategory(els.pdfDocxCategory.value)
+          }));
+          renderDocumentPreview(documentPreviewQuestions);
+          hideLoading();
+          showToast(`${documentPreviewQuestions.length} questão(ões) identificadas para revisão.`, 'success');
+        } catch (error) {
+          console.error(error);
+          hideLoading();
+          showToast(error.message || 'Falha no processamento do documento.', 'error');
+        }
+      }
+
+      function finalizeDocumentImport() {
+        if (!documentPreviewQuestions.length) {
+          showToast('Nenhuma questão foi reconhecida para confirmar.', 'info');
+          return;
+        }
+
+        documentPreviewQuestions.forEach((candidate, index) => {
+          const selectedInput = document.querySelector(`input[name="docCorrect_${index}"]:checked`);
+          const selectedIndex = selectedInput ? Number(selectedInput.value) : null;
+          if (candidate.alternativas.length && selectedIndex !== null && selectedIndex >= 0 && selectedIndex < candidate.alternativas.length) {
+            candidate.correta = selectedIndex;
+            candidate.needsConfirmation = false;
+          }
+        });
+
+        const validQuestions = documentPreviewQuestions.filter((candidate) => candidate.pergunta && candidate.alternativas.length >= 2);
+        if (!validQuestions.length) {
+          showToast('Nenhuma questão válida foi confirmada para importação.', 'error');
+          return;
+        }
+
+        validQuestions.forEach((question) => {
+          addQuestion({
+            categoria: normalizeCategory(question.categoria || els.pdfDocxCategory.value),
+            pergunta: question.pergunta,
+            alternativas: question.alternativas,
+            correta: question.correta ?? 0,
+            comentario: question.comentario || '',
+            acertos: 0,
+            erros: 0,
+            ultimoResultado: null
+          });
+        });
+
+        documentPreviewQuestions = [];
+        els.documentImportInput.value = '';
+        renderDocumentPreview([]);
+        renderAll();
+        showToast(`${validQuestions.length} questão(ões) importada(s) do documento.`, 'success');
+      }
+
+      function buildAiCandidates(materialText, count, categoryMode, fixedCategory) {
+        const sanitized = sanitizeDocumentText(materialText).replace(/\s+/g, ' ');
+        const chunks = sanitized
+          .split(/(?<=[.!?])\s+(?=[A-ZÀ-Ö0-9])/)
+          .map((chunk) => chunk.trim())
+          .filter((chunk) => chunk.length > 40)
+          .slice(0, Math.max(8, count * 3));
+
+        if (!chunks.length) {
+          return [];
+        }
+
+        const questions = [];
+        const maxQuestions = Math.min(Number(count) || 5, 100);
+
+        for (let i = 0; i < maxQuestions; i++) {
+          const baseChunk = chunks[i % chunks.length];
+          const reference = baseChunk.length > 220 ? baseChunk.slice(0, 220) : baseChunk;
+          const distractors = chunks.filter((item) => item !== reference).slice(0, 3);
+          const alternatives = [
+            reference,
+            ...distractors.slice(0, 3).map((item) => item.length > 160 ? item.slice(0, 160) : item)
+          ].slice(0, 4);
+
+          while (alternatives.length < 4) {
+            alternatives.push('Informação ausente no material fornecido');
+          }
+
+          const correct = 0;
+          const questionText = `A partir do trecho abaixo, qual afirmação está diretamente apoiada no material fornecido?\n\n“${reference}”`;
+          const q = {
+            categoria: categoryMode === 'fixed' ? fixedCategory : CATEGORIES[i % CATEGORIES.length],
+            pergunta: questionText,
+            alternativas: alternatives,
+            correta: correct,
+            comentario: 'As alternativas foram geradas apenas com base no material fornecido, sem complementar conhecimento externo.',
+            source: 'ai'
+          };
+          questions.push(q);
+        }
+
+        return questions;
+      }
+
+      async function readFilesAsText(files) {
+        let combined = '';
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const name = file.name.toLowerCase();
+          if (name.endsWith('.txt') || name.endsWith('.md')) {
+            const text = await file.text();
+            combined += '\n' + text;
+          } else if (name.endsWith('.pdf')) {
+            const pdfText = await parsePdfFile(file);
+            combined += '\n' + pdfText;
+          }
+        }
+        return combined;
+      }
+
+      async function generateAiQuestions() {
+        const material = (document.getElementById('aiMaterial').value || '').trim();
+        const files = Array.from(els.aiFiles.files || []);
+        const count = Math.max(5, Math.min(100, Number(els.aiQuantity.value) || 5));
+        const categoryMode = els.aiCategoryMode.value;
+        const fixedCategory = normalizeCategory(els.aiFixedCategory.value);
+
+        if (!material && !files.length) {
+          showToast('Cole material de estudo ou anexe pelo menos um arquivo para gerar questões.', 'error');
+          return;
+        }
+
+        try {
+          showLoading('Gerando questões', 'Lendo material e montando lote inicial…', 10);
+          let combinedText = material;
+          if (files.length) {
+            const fileText = await readFilesAsText(files);
+            combinedText += ' ' + fileText;
+          }
+
+          if (!combinedText.trim()) {
+            throw new Error('O material informado ficou vazio após a leitura dos arquivos.');
+          }
+
+          const candidates = buildAiCandidates(combinedText, count, categoryMode, fixedCategory);
+          if (!candidates.length) {
+            throw new Error('Não foi possível gerar questões confiáveis com o material entregue. Reenvie texto ou arquivos mais completos.');
+          }
+
+          aiPreviewQuestions = candidates;
+          renderAiPreview();
+          hideLoading();
+          showToast('Prévia de geração criada com sucesso.', 'success');
+        } catch (error) {
+          console.error(error);
+          hideLoading();
+          showToast(error.message || 'Erro ao gerar questões com base no material.', 'error');
+        }
+      }
+
+      function renderAiPreview() {
+        if (!aiPreviewQuestions.length) {
+          els.aiPreview.innerHTML = '<div class="empty-state">Nenhuma questão pronta para revisão. Gere uma nova batch a partir do material de estudo.</div>';
+          return;
+        }
+
+        els.aiPreview.innerHTML = aiPreviewQuestions.map((item, index) => `
+          <div class="preview-item">
+            <div class="question-meta">
+              <span class="inline-badge">${escapeHtml(item.categoria)}</span>
+              <span class="hint">Prévia ${index + 1}</span>
+            </div>
+            <div class="question-text">${escapeHtml(item.pergunta)}</div>
+            <div class="question-options">
+              ${item.alternativas.map((alt, altIndex) => `
+                <div class="option ${altIndex === Number(item.correta) ? 'correct' : ''}">
+                  <span class="option-label">${String.fromCharCode(65 + altIndex)}</span>
+                  <span>${escapeHtml(alt)}</span>
+                </div>
+              `).join('')}
+            </div>
+            <div class="comment"><strong>Revisão:</strong> ${escapeHtml(item.comentario)}</div>
+            <div class="actions">
+              <button class="button secondary" type="button" data-action="ai-add-one" data-index="${index}">Adicionar</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function addAiQuestionByIndex(index) {
+        const question = aiPreviewQuestions[index];
+        if (!question) return;
+        addQuestion({
+          categoria: normalizeCategory(question.categoria),
+          pergunta: question.pergunta,
+          alternativas: question.alternativas,
+          correta: question.correta ?? 0,
+          comentario: question.comentario || '',
+          acertos: 0,
+          erros: 0,
+          ultimoResultado: null,
+          lastSelected: null
+        });
+        aiPreviewQuestions.splice(index, 1);
+        renderAiPreview();
+        renderAll();
+        showToast('Questão adicionada ao banco.', 'success');
+      }
+
+      function addAllAiPreview() {
+        if (!aiPreviewQuestions.length) {
+          showToast('Não há prévias para adicionar.', 'info');
+          return;
+        }
+
+        aiPreviewQuestions.forEach((question) => {
+          addQuestion({
+            categoria: normalizeCategory(question.categoria),
+            pergunta: question.pergunta,
+            alternativas: question.alternativas,
+            correta: question.correta ?? 0,
+            comentario: question.comentario || '',
+            acertos: 0,
+            erros: 0,
+            ultimoResultado: null,
+            lastSelected: null
+          });
+        });
+
+        aiPreviewQuestions = [];
+        renderAiPreview();
+        renderAll();
+        showToast(`${state.questions.length} questão(ões) no banco agora.`, 'success');
+      }
+
+      function toggleTheme() {
+        state.theme = state.theme === 'dark' ? 'light' : 'dark';
+        document.body.classList.toggle('light', state.theme === 'light');
+        document.body.classList.toggle('theme-dark', state.theme === 'dark');
+        els.toggleTheme.textContent = state.theme === 'dark' ? '🌙 Tema' : '☀️ Tema';
+        try {
+          saveState();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      function bindEvents() {
+        document.querySelectorAll('.tab-button').forEach((button) => {
+          button.addEventListener('click', () => {
+            const tab = button.dataset.tab;
+            document.querySelectorAll('.tab-button').forEach((tabButton) => {
+              tabButton.classList.toggle('active', tabButton === button);
+            });
+            document.querySelectorAll('.tab-panel').forEach((panel) => {
+              panel.classList.toggle('active', panel.id === `tab-${tab}`);
+            });
+          });
+        });
+
+        els.manualAltCount.addEventListener('change', renderManualAlternatives);
+        els.manualForm.addEventListener('submit', submitManualQuestion);
+        els.resetManualForm.addEventListener('click', resetManualForm);
+        els.bankQuestionList.addEventListener('click', handleBankActions);
+        els.studyRandomize.addEventListener('click', randomizeStudyQuestion);
+        els.studyCategoryFilter.addEventListener('change', renderStudyPanel);
+        els.bankCategoriaFilter.addEventListener('change', renderQuestionList);
+        els.studyPanel.addEventListener('click', (event) => {
+          const answerButton = event.target.closest('[data-study-answer]');
+          if (answerButton) {
+            handleStudySelection(event);
+            return;
+          }
+          if (event.target.closest('#studyNextQuestion')) {
+            randomizeStudyQuestion();
+          }
+        });
+        els.errorPanel.addEventListener('click', (event) => {
+          const answerButton = event.target.closest('[data-error-answer]');
+          if (answerButton) {
+            handleErrorSelection(event);
+            return;
+          }
+          if (event.target.closest('#nextErrorQuestion')) {
+            const wrongQuestions = state.questions.filter((q) => q.ultimoResultado === 'errado');
+            if (!wrongQuestions.length) {
+              currentErrorQuestionId = null;
+              renderErrorPanel();
+              return;
+            }
+            const currentIndex = wrongQuestions.findIndex((q) => q.id === currentErrorQuestionId);
+            const nextIndex = currentIndex >= 0 ? (currentIndex + 1) % wrongQuestions.length : 0;
+            currentErrorQuestionId = wrongQuestions[nextIndex].id;
+            renderErrorPanel();
+          }
+        });
+        els.jsonCsvImportInput.addEventListener('change', (event) => importJsonOrCsv(event.target.files[0]));
+        els.documentImportInput.addEventListener('change', handleDocumentImport);
+        els.downloadCsvTemplate.addEventListener('click', downloadCsvTemplate);
+        els.toggleTheme.addEventListener('click', toggleTheme);
+        els.aiCategoryMode.addEventListener('change', () => {
+          const fixed = els.aiCategoryMode.value === 'fixed';
+          els.aiFixedCategory.parentElement.parentElement.style.display = fixed ? 'block' : 'none';
+        });
+        els.generateAiQuestions.addEventListener('click', generateAiQuestions);
+        els.confirmDocumentImport.addEventListener('click', finalizeDocumentImport);
+        els.confirmAiBatch.addEventListener('click', addAllAiPreview);
+        els.aiPreview.addEventListener('click', (event) => {
+          const button = event.target.closest('[data-action="ai-add-one"]');
+          if (button) addAiQuestionByIndex(Number(button.dataset.index));
+        });
+      }
+
+      function init() {
+        loadState();
+        fillCategorySelects();
+        document.body.classList.toggle('light', state.theme === 'light');
+        els.toggleTheme.textContent = state.theme === 'dark' ? '🌙 Tema' : '☀️ Tema';
+        els.manualCategoria.value = CATEGORIES[0];
+        els.manualAltCount.value = '4';
+        els.studyCategoryFilter.value = 'all';
+        els.bankCategoriaFilter.value = 'all';
+        els.aiFixedCategory.value = CATEGORIES[0];
+        els.aiCategoryMode.value = 'auto';
+        els.aiFixedCategory.parentElement.parentElement.style.display = 'none';
+        renderManualAlternatives();
+        bindEvents();
+        renderAll();
+      }
+
+      init();
+    </script>
+  </body>
+</html>
